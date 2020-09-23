@@ -18,7 +18,6 @@ Board Packpage
   - com.linegames.assignment.board
 UserInfo Package
   - com.linegames.assignment.userinfo
-
 applicaiton properties path
   - /src/main/resources/application.properties
 Thymeleaf template path
