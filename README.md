@@ -10,7 +10,7 @@ Database
   - H2
   
 Build
-  Run configuration - Gradle Task - Tasks ADD ( clean, jar, bulid )
+  - Run configuration -> Gradle Task -> Tasks ADD ( clean, jar, bulid ) -> Run
  
 Spring Security Setting
  - com.linegames.assignment.security.WebSecurityConfig
