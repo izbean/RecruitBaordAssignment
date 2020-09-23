@@ -21,7 +21,7 @@ import com.linegames.assignment.board.repository.BoardRepository;
 import com.linegames.assignment.board.service.BoardService;
 
 @Controller
-@RequestMapping("/board/")
+@RequestMapping("board/")
 public class BoardController {
 	
 	@Autowired
@@ -33,19 +33,19 @@ public class BoardController {
 	@GetMapping("/list")
 	public String list(@PageableDefault Pageable pageable, Model model) {
 		model.addAttribute("boardList", boardService.findByBoardList(pageable));
-		return "board/list";
+		return "/board/list";
 	}
 	
 	@GetMapping("/form")
 	public String form() {
-		return "board/form";
+		return "/board/form";
 	}
 	
 	// 게시글 상세
 	@GetMapping("/detail")
 	public String detail(@RequestParam(value = "idx", defaultValue = "0") int idx, Model model) {
 		model.addAttribute("detail", boardRepository.findByIdx(idx));
-		return "board/detail";
+		return "/board/detail";
 	}
 	
 	// 게시글 생성
