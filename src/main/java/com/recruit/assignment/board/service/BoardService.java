@@ -29,12 +29,14 @@ public class BoardService {
 		return boardOpt.get();
 	}
 
+	public Board
+
 	public Page<Board> findByBoardList(Pageable pageable) {
 		pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1 , pageable.getPageSize());
 		return boardRepository.findAll(pageable);
 	}
 
-	public String currentUserName() {
+	private String currentUserName() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) authentication.getPrincipal();
 		return user.getUsername();
