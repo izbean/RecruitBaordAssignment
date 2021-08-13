@@ -4,7 +4,7 @@ plugins {
 	id 'java'
 }
 
-group = 'com.linegames'
+group = 'com.recruit'
 version = '0.1'
 sourceCompatibility = '1.8'
 
@@ -14,9 +14,11 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
+	implementation 'org.apache.commons:commons-collections4:4.0'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	runtimeOnly 'com.h2database:h2'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
@@ -29,9 +31,9 @@ dependencies {
 }
 jar {
     manifest {
-        attributes 'Title': 'LineGamesAssignment',
+        attributes 'Title': 'RecruitAssignment',
                    'Version': 1.0,
-                   'Main-Class': 'com.linegames.assignment.LineGamesAssignmentApplication'
+                   'Main-Class': 'com.recruit.assignment.LineGamesAssignmentApplication'
     }
     from {
         configurations.compile.collect {

@@ -1,8 +1,8 @@
-package com.linegames.assignment.security;
+package com.recruit.assignment.security;
 
+import com.recruit.assignment.user.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.linegames.assignment.userinfo.service.UserInfoService;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().
 		antMatchers("/h2-console/*").permitAll()
 		.antMatchers("/user/*").permitAll()
-		.antMatchers("/board/**").hasRole("USER")
+		.antMatchers("/board/**").hasRole(UserRole.USER.name())
 		.and()
 		.formLogin()
 		.loginPage("/user/login")

@@ -1,4 +1,4 @@
-package com.linegames.assignment.userinfo.controller;
+package com.recruit.assignment.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.linegames.assignment.userinfo.entity.UserInfo;
-import com.linegames.assignment.userinfo.service.UserInfoService;
+import com.recruit.assignment.user.User;
+import com.recruit.assignment.user.service.UserService;
 
 @Controller
 @RequestMapping("user/")
-public class UserInfoController {
+public class UserController {
 
 	@Autowired
-	UserInfoService userInfoService;
+	UserService userInfoService;
 	
 	@GetMapping("/login")
 	public String login() {
@@ -40,8 +40,8 @@ public class UserInfoController {
 	// 회원가입
 	@ResponseBody
 	@PostMapping("/signUp")
-	public ResponseEntity<String> signUp(UserInfo userInfo) {
-		return new ResponseEntity<String>(String.valueOf(userInfoService.insertByUserInfo(userInfo)), HttpStatus.OK);
+	public ResponseEntity<String> signUp(User user) {
+		return new ResponseEntity<String>(String.valueOf(userInfoService.signUp(user)), HttpStatus.OK);
 	}
 	
 }

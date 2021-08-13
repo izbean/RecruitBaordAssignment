@@ -13,13 +13,13 @@ Build
   - Run configuration -> Gradle Task -> Tasks ADD ( clean, jar, bulid ) -> Run
  
 Spring Security Setting
- - com.linegames.assignment.security.WebSecurityConfig
+ - WebSecurityConfig
  
 Board Packpage
   - com.linegames.assignment.board
   
 UserInfo Package
-  - com.linegames.assignment.userinfo
+  - com.linegames.assignment.user
   
 applicaiton properties path
   - /src/main/resources/application.properties
