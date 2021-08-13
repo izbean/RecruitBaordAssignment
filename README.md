@@ -14,16 +14,4 @@ Build
  
 Spring Security Setting
  - WebSecurityConfig
- 
-Board Packpage
-  - com.linegames.assignment.board
-  
-UserInfo Package
-  - com.linegames.assignment.user
-  
-applicaiton properties path
-  - /src/main/resources/application.properties
-  
-Thymeleaf template path
-  - /src/main/resources/templates
 
