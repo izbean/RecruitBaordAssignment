@@ -1,4 +1,4 @@
-# RecruitBaordAssignment
+# RecruitBoardAssignment
 
 Stack
   - Spring boot 
