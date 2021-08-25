@@ -1,10 +1,10 @@
-package com.recruit.assignment.board;
+package com.recruit.assignment.domain.board;
 
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
-import com.recruit.assignment.user.User;
+import com.recruit.assignment.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

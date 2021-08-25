@@ -1,8 +1,8 @@
-package com.recruit.assignment.board.service;
+package com.recruit.assignment.domain.board.service;
 
-import com.recruit.assignment.board.Board;
-import com.recruit.assignment.board.exception.BoardContentNotFoundException;
-import com.recruit.assignment.board.repository.BoardRepository;
+import com.recruit.assignment.domain.board.Board;
+import com.recruit.assignment.domain.board.exception.BoardContentNotFoundException;
+import com.recruit.assignment.domain.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,8 +28,6 @@ public class BoardService {
 
 		return boardOpt.get();
 	}
-
-	public Board
 
 	public Page<Board> findByBoardList(Pageable pageable) {
 		pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1 , pageable.getPageSize());

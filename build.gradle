@@ -17,7 +17,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
 	implementation 'org.apache.commons:commons-collections4:4.0'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	runtimeOnly 'com.h2database:h2'
@@ -33,7 +32,7 @@ jar {
     manifest {
         attributes 'Title': 'RecruitAssignment',
                    'Version': 1.0,
-                   'Main-Class': 'com.recruit.assignment.LineGamesAssignmentApplication'
+                   'Main-Class': 'com.recruit.assignment.RecruitAssignmentApplication'
     }
     from {
         configurations.compile.collect {

@@ -1,4 +1,4 @@
-package com.recruit.assignment.board.dto;
+package com.recruit.assignment.domain.board.dto;
 
 import lombok.Data;
 

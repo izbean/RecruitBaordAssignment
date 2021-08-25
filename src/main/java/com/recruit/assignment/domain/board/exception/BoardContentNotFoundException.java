@@ -1,6 +1,4 @@
-package com.recruit.assignment.board.exception;
-
-import java.io.Serializable;
+package com.recruit.assignment.domain.board.exception;
 
 public class BoardContentNotFoundException extends RuntimeException {
 
