@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.recruit.assignment.domain.user.UserRole;
 import com.recruit.assignment.domain.user.dto.UserRequestDto;
 import com.recruit.assignment.domain.user.dto.UserResponseDto;
+import com.recruit.assignment.domain.user.exception.UserNotFoundException;
 import com.recruit.assignment.utils.password.PasswordEncoderUtils;
 import com.recruit.assignment.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import com.recruit.assignment.domain.user.User;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +37,14 @@ public class UserService implements UserDetailsService {
     }
 
     // 사용자 정보 조회
-    public User findByUserInfo(String userId) {
-        return userRepository.findByUserId(userId);
+    public UserResponseDto getUser(String userId) {
+
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if (userOptional.isEmpty())
+            throw new UserNotFoundException(userId);
+
+        return UserResponseDto.builder().user(userOptional.get()).build();
     }
 
     // 회원가입

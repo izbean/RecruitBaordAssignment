@@ -34,10 +34,16 @@ public class UserController {
 	// 아이디 중복체크
 	@ResponseBody
 	@GetMapping("/{id}")
-	public ResponseEntity<String> DuplicationCheckByuserId(@PathVariable("id") String userId) {
-		return new ResponseEntity<String>(String.valueOf(userService.existsById(userId)), HttpStatus.OK);
+	public UserResponseDto getUser(@PathVariable("id") String userId) {
+		return userService.getUser(userId);
 	}
-	
+
+	@ResponseBody
+	@GetMapping("/check/{id}")
+	public ResponseEntity<Object> duplicationCheckByUserId(@PathVariable("id") String userId) {
+		return new ResponseEntity<Object>(userService.existsById(userId), HttpStatus.OK);
+	}
+
 	// 회원가입
 	@ResponseBody
 	@PostMapping

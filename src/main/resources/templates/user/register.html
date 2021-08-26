@@ -9,26 +9,31 @@
   <link rel="stylesheet" href="../../vendors/base/vendor.bundle.base.css">
   <link rel="stylesheet" href="../../css/style.css">
   <link rel="shortcut icon" href="../../images/favicon.png" />
-  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script type="text/javascript">
     function createUser() {
-        if ( $('#pwdChk').text() == 'N') {
+
+        let $signUpForm = $('#signUpForm');
+
+        if (idCheckSuccess) {
+            alert("아이디를 확인해주세요");
+            return;
+        }
+
+        if (passwordCheckSuccess) {
           alert("비밀번호를 확인해주세요.");
           return;
         }
-        if ( _usingId ) {
-          alert("아이디를 확인해주세요");
-          return;
-        }
-        if ( $('#info').find('[name=email]').val() == "" ) {
+
+        if ( $signUpForm.find('[name=email]').val() === "" ) {
           alert("이메일을 확인해주세요.");
           return;
         }
         $.ajax({
-          url: '/user/signUp',
+          url: '/user',
           method: 'POST',
           async : false,
-          data : $('#info').serialize(),
+          data : $signUpForm.serialize(),
           dataType : 'json',
           success : function (res) {
               alert("계정 생성이 완료 되었습니다.");
@@ -40,48 +45,42 @@
       });
     }
 
-    var _usingId = true;
+    let idCheckSuccess = false;
+    let passwordCheckSuccess = false;
 
-    function idChk(id) {
-    	
-    	if (!id) {
-    		alert("아이디를 입력해주세요.");
-    		return;
-    	}
-
+    function duplicationCheckByUserId(userId) {
         $.ajax({
-          url: '/user/dpChk/' + id,
-          method: 'GET',
-          async : false,
-          dataType : 'json',
-          success : function (res) {
-        	  if ( !res ) {
-        		  alert("아이디 중복 체크 완료");
-        		  _usingId = false;
-        		  $('#chkIdMsg').hide();
-        	  } else {
-        		  _usingId = true;
-        		  $('#chkIdMsg').show();
-        	  }
-          },
-          error: function (xhr) {
-        	  
-          }
-      });
-
+            url: '/user/check/' + userId,
+            method: 'GET',
+            async : true,
+            success : function (response) {
+                console.log(response);
+                if (!response) {
+                    idCheckSuccess = true;
+                    $('#idDuplicatedMessageDiv').hide();
+                } else {
+                    idCheckSuccess = false;
+                    $('#idDuplicatedMessageDiv').show();
+                }
+            }, error : function (a, b, c) {
+                console.log(a);
+                console.log(b);
+                console.log(c);
+            }
+        });
     }
 
-    function pwdChk() {
-      var $f = $('#info');
-      var pwd1 = $f.find('[name=password]').val();
-      var pwd2 = $f.find('[name=password2]').val();
+    function passwordCheck() {
+      var $f = $('#signUpForm');
+      var password = $f.find('[name=password]').val();
+      var passwordConfirm = $f.find('[name=passwordConfirm]').val();
 
-      if ( pwd1 != pwd2 ) {
-        $('#chkMsg').show();
-        $('#pwdChk').text('N');
+      if ( password !== passwordConfirm ) {
+          passwordCheckSuccess = false;
+        $('#passwordCheckMssageDiv').show();
       } else {
-        $('#chkMsg').hide();
-        $('#pwdChk').text('Y');
+          passwordCheckSuccess = true;
+        $('#passwordCheckMssageDiv').hide();
       }
     }
     
@@ -98,7 +97,7 @@
               <div class="brand-logo" style="margin-left: auto; margin-right: auto; display:table">
 <!--                 <img src="../../images/logo.png" alt="logo"> -->
               </div>
-              <form id="info" class="pt-3">
+              <form id="signUpForm" class="pt-3">
               	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <div class="form-group">
                   <label>사용자명</label>
@@ -108,12 +107,9 @@
                         <i class="mdi mdi-account-outline text-primary"></i>
                       </span>
                     </div>
-                    <input type="text" name="userId" class="form-control form-control-lg" placeholder="" maxlength="20" required>
-                    <div class="input-group-append">
-                      <button class="btn btn-sm btn-primary" type="button" onclick="idChk($('#info').find('[name=userId]').val())">중복체크</button>
-                    </div>
+                    <input type="text" name="userId" class="form-control form-control-lg" placeholder="" maxlength="20" onchange="duplicationCheckByUserId(this.value)" required >
                     <br>
-                    <div class="col-lg-12" style="margin-top:5px; display:none;" id="chkIdMsg"><p><b style="color:red"><i class="mdi mdi mdi-close-box-outline text-danger"></i> 이미 존재하는 아이디 입니다.</b></p></div>
+                    <div class="col-lg-12" style="margin-top:5px; display:none;" id="idDuplicatedMessageDiv"><p><b style="color:red"><i class="mdi mdi mdi-close-box-outline text-danger"></i> 이미 존재하는 아이디 입니다.</b></p></div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -124,7 +120,7 @@
                         <i class="mdi mdi-lock-outline text-primary"></i>
                       </span>
                     </div>
-                    <input type="password" name="password" class="form-control form-control-lg" id="exampleInputPassword1" maxlength="20" placeholder="" onkeyup="pwdChk()" required>
+                    <input type="password" name="password" class="form-control form-control-lg" maxlength="20" placeholder="" onkeyup="passwordCheck()" required>
                   </div>
                 </div>
                <div class="form-group">
@@ -135,10 +131,9 @@
                         <i class="mdi mdi-lock-outline text-primary"></i>
                       </span>
                     </div>
-                    <input type="password" name="password2" class="form-control form-control-lg" id="exampleInputPassword2" maxlength="20"  placeholder="" onkeyup="pwdChk()" required>
+                    <input type="password" name="passwordConfirm" class="form-control form-control-lg" maxlength="20"  placeholder="" onkeyup="passwordCheck()" required>
                     <br>
-                    <div class="col-lg-12" style="margin-top:5px; display:none;" id="chkMsg"><p><b style="color:red"><i class="mdi mdi mdi-close-box-outline text-danger"></i> 비밀번호가 동일하지 않습니다.</b></p></div>
-                    <pre id="pwdChk" style="display:none">N</pre>
+                    <div class="col-lg-12" style="margin-top:5px; display:none;" id="passwordCheckMessageDiv"><p><b style="color:red"><i class="mdi mdi mdi-close-box-outline text-danger"></i> 비밀번호가 동일하지 않습니다.</b></p></div>
                   </div>
                 </div>
                 <div class="form-group">
