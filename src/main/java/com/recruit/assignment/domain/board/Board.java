@@ -17,15 +17,16 @@ public class Board {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private long id;
 
-	@OneToOne
-	@JoinColumn(name = "board_contents_id")
+	private String category;
+
+	@OneToOne(mappedBy = "board")
 	private BoardContents boardContents;
 
-	private String title;
+	private boolean isDeleted;
 
-	private String contents;
+	private boolean isBlocked;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "created_user")

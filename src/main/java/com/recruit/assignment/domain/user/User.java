@@ -1,6 +1,7 @@
 package com.recruit.assignment.domain.user;
 
 import com.recruit.assignment.domain.board.Board;
+import com.recruit.assignment.domain.board.BoardComment;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -23,6 +24,12 @@ public class User {
 
 	@OneToMany(mappedBy = "modifiedUser")
 	private List<Board> modifiedUserBoards;
+
+	@OneToMany(mappedBy = "createdUser")
+	private List<BoardComment> createdUserBoardComments;
+
+	@OneToMany(mappedBy = "modifiedUser")
+	private List<BoardComment> modifiedUserBoardComments;
 
 	@NotEmpty
 	private String password;

@@ -34,10 +34,4 @@ public class BoardService {
 		return boardRepository.findAll(pageable);
 	}
 
-	private String currentUserName() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		User user = (User) authentication.getPrincipal();
-		return user.getUsername();
-	}
-
 }
