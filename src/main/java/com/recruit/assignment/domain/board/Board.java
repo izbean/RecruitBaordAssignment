@@ -19,9 +19,13 @@ public class Board {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@OneToOne
+	@JoinColumn(name = "board_contents_id")
+	private BoardContents boardContents;
+
 	private String title;
 
-	private String content;
+	private String contents;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "created_user")

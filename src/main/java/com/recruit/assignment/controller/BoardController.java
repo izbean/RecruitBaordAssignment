@@ -21,28 +21,28 @@ import com.recruit.assignment.domain.board.service.BoardService;
 @RequiredArgsConstructor
 public class BoardController {
 
-	private final BoardService boardService;
-	
-	@GetMapping("/list")
-	public String list(@PageableDefault Pageable pageable, Model model) {
-		model.addAttribute("boardList", boardService.findByBoardList(pageable));
-		return "/board/list";
-	}
-	
-	@GetMapping("/form")
-	public String form() {
-		return "/board/form";
-	}
-	
-	// 게시글 상세
-	@GetMapping("/detail")
-	public String detail(
-			@RequestParam(value = "idx", defaultValue = "0") int boardId,
-			Model model
-	) {
-		model.addAttribute("detail", boardService.getBoardDetail(boardId));
-		return "/board/detail";
-	}
+    private final BoardService boardService;
+
+    @GetMapping("/list")
+    public String getBoardList(@PageableDefault Pageable pageable, Model model) {
+        model.addAttribute("boardList", boardService.findByBoardList(pageable));
+        return "/board/list";
+    }
+
+    @GetMapping("/form")
+    public String form() {
+        return "/board/form";
+    }
+
+    // 게시글 상세
+    @GetMapping("/{boardContentId}")
+    public String getBoardContentDetail(
+            @PathVariable int boardContentId,
+            Model model
+    ) {
+        model.addAttribute("ContentDetail", boardService.getBoardContentDetail(boardContentId));
+        return "/board/detail";
+    }
 
 //	@PostMapping("/write")
 //	public ResponseEntity<String> write(Board board) {
@@ -65,5 +65,5 @@ public class BoardController {
 //		boardRepository.deleteById(idx);
 //		return new ResponseEntity<>("success", HttpStatus.OK);
 //	}
-	
+
 }

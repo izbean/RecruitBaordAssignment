@@ -38,7 +38,6 @@ public class UserService implements UserDetailsService {
 
     // 사용자 정보 조회
     public UserResponseDto getUser(String userId) {
-
         Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isEmpty())

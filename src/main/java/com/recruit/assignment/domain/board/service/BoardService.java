@@ -20,11 +20,11 @@ public class BoardService {
 
 	private final BoardRepository boardRepository;
 
-	public Board getBoardDetail(int boardId) {
-		Optional<Board> boardOpt = boardRepository.findById(boardId);
+	public Board getBoardContentDetail(int boardContentId) {
+		Optional<Board> boardOpt = boardRepository.findById(boardContentId);
 
-		if (!boardOpt.isPresent())
-			throw new BoardContentNotFoundException(boardId);
+		if (boardOpt.isEmpty())
+			throw new BoardContentNotFoundException(boardContentId);
 
 		return boardOpt.get();
 	}
