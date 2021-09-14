@@ -1,8 +1,10 @@
 package com.recruit.assignment.config;
 
+import com.recruit.assignment.config.exception.LoginFailureHandler;
 import com.recruit.assignment.domain.user.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -21,6 +23,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public LoginFailureHandler loginFailureHandler() { return new LoginFailureHandler(); }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -32,6 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/user/login")
+                .failureHandler(loginFailureHandler())
+                .failureUrl("/user/login?error")
+                .failureForwardUrl("/user/login?error")
                 .defaultSuccessUrl("/board/list")
                 // Logout.
                 .and()

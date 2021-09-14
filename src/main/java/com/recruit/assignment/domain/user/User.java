@@ -34,7 +34,7 @@ public class User {
 	@NotEmpty
 	private String password;
 
-	private UserRole authority = UserRole.USER;
+	private String authority = UserRole.USER.name();
 
 	private String email;
 

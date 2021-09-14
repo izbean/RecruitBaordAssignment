@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class UserRequestDto implements Serializable {
 
     private static final long serialVersionUID = -1150644725759026071L;
+
     @NotEmpty
     private String userId;
 

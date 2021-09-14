@@ -15,8 +15,6 @@ public class BoardContents {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private long boardId;
-
     @OneToOne
     @JoinColumn(name = "board_id")
     private Board board;

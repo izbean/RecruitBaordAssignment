@@ -12,6 +12,7 @@ import com.recruit.assignment.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,15 +60,41 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+    public UserResponseDto loginUser(UserRequestDto userRequestDto) {
+        String userId = userRequestDto.getUserId();
+        String password = userRequestDto.getUserId();
+
+        UserDetails userDetails = loadUserByUserIdByPassword(userId, password);
+
+        return UserResponseDto.builder()
+                .code(HttpStatus.OK)
+                .user(User.builder().userId(userDetails.getUsername()).build())
+                .build();
+    }
+
     // 로그인
+    public UserDetails loadUserByUserIdByPassword(String userId, String password) throws AuthenticationCredentialsNotFoundException {
+        Optional<User> userOptional = userRepository.findByUserIdAndPassword(userId, password);
+
+        if (userOptional.isEmpty()) throw new AuthenticationCredentialsNotFoundException("아이디나 패스워드가 일치하지 않습니다.");
+
+        User user = userOptional.get();
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getAuthority()));
+
+        return new org.springframework.security.core.userdetails.User(user.getUserId(), user.getPassword(), authorities);
+    }
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUserId(username);
 
-        if (user == null) throw new UsernameNotFoundException(username);
+        if (user == null) throw new AuthenticationCredentialsNotFoundException(username);
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getAuthority().name()));
+        authorities.add(new SimpleGrantedAuthority(user.getAuthority()));
 
         return new org.springframework.security.core.userdetails.User(user.getUserId(), user.getPassword(), authorities);
     }

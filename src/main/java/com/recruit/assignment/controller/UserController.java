@@ -31,17 +31,18 @@ public class UserController {
 		return "/user/register";
 	}
 	
-	// 아이디 중복체크
 	@ResponseBody
 	@GetMapping("/{id}")
 	public UserResponseDto getUser(@PathVariable("id") String userId) {
+		log.debug(userId);
 		return userService.getUser(userId);
 	}
 
+	// 아이디 중복체크
 	@ResponseBody
 	@GetMapping("/check/{id}")
 	public ResponseEntity<Object> duplicationCheckByUserId(@PathVariable("id") String userId) {
-		return new ResponseEntity<Object>(userService.existsById(userId), HttpStatus.OK);
+		return new ResponseEntity<>(userService.existsById(userId), HttpStatus.OK);
 	}
 
 	// 회원가입
@@ -55,6 +56,12 @@ public class UserController {
 	@PutMapping
 	public UserResponseDto updateUser(UserRequestDto userRequestDto) {
 		return null;
+	}
+
+	@ResponseBody
+	@PostMapping("/login")
+	public UserResponseDto loginUser(@Valid UserRequestDto userRequestDto) {
+		return userService.loginUser(userRequestDto);
 	}
 	
 }

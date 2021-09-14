@@ -11,29 +11,53 @@
   <link rel="shortcut icon" href="../../images/favicon.png" />
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script type="text/javascript">
-    function createUser() {
+    let passwordCheckSuccess = false;
 
-        let $signUpForm = $('#signUpForm');
+    function validateForSignUp() {
+        let userId = document.getElementById('userId').value;
+        let email = document.getElementById('email').value;
+        let isDuplicatedByUserId = true;
 
-        if (idCheckSuccess) {
+        $.ajax({
+            url: '/user/check/' + userId,
+            method: 'GET',
+            async : false,
+            dataType: 'json',
+            success : function (response) {
+                isDuplicatedByUserId = response;
+            }, error : function (a, b, c) {
+                console.log(a);
+                console.log(b);
+                console.log(c);
+            }
+        });
+
+        if (isDuplicatedByUserId) {
             alert("아이디를 확인해주세요");
             return;
         }
 
-        if (passwordCheckSuccess) {
-          alert("비밀번호를 확인해주세요.");
-          return;
+        if (!passwordCheckSuccess) {
+            alert("비밀번호를 확인해주세요.");
+            return;
         }
 
-        if ( $signUpForm.find('[name=email]').val() === "" ) {
-          alert("이메일을 확인해주세요.");
-          return;
+        if (email === '') {
+            alert("이메일을 확인해주세요.");
+            return;
         }
+
+        // 회원가입
+        createUser();
+
+    }
+
+    function createUser() {
         $.ajax({
           url: '/user',
           method: 'POST',
           async : false,
-          data : $signUpForm.serialize(),
+          data : $('#signUpForm').serialize(),
           dataType : 'json',
           success : function (res) {
               alert("계정 생성이 완료 되었습니다.");
@@ -45,43 +69,18 @@
       });
     }
 
-    let idCheckSuccess = false;
-    let passwordCheckSuccess = false;
-
-    function duplicationCheckByUserId(userId) {
-        $.ajax({
-            url: '/user/check/' + userId,
-            method: 'GET',
-            async : true,
-            success : function (response) {
-                console.log(response);
-                if (!response) {
-                    idCheckSuccess = true;
-                    $('#idDuplicatedMessageDiv').hide();
-                } else {
-                    idCheckSuccess = false;
-                    $('#idDuplicatedMessageDiv').show();
-                }
-            }, error : function (a, b, c) {
-                console.log(a);
-                console.log(b);
-                console.log(c);
-            }
-        });
-    }
-
     function passwordCheck() {
-      var $f = $('#signUpForm');
-      var password = $f.find('[name=password]').val();
-      var passwordConfirm = $f.find('[name=passwordConfirm]').val();
+        let $f = $('#signUpForm');
+        let password = $f.find('[name=password]').val();
+        let passwordConfirm = $f.find('[name=passwordConfirm]').val();
 
-      if ( password !== passwordConfirm ) {
-          passwordCheckSuccess = false;
-        $('#passwordCheckMssageDiv').show();
-      } else {
-          passwordCheckSuccess = true;
-        $('#passwordCheckMssageDiv').hide();
-      }
+        if (password !== passwordConfirm) {
+            passwordCheckSuccess = false;
+            $('#passwordCheckMessageDiv').show();
+        } else {
+            passwordCheckSuccess = true;
+            $('#passwordCheckMessageDiv').hide();
+        }
     }
     
   </script>
@@ -107,9 +106,7 @@
                         <i class="mdi mdi-account-outline text-primary"></i>
                       </span>
                     </div>
-                    <input type="text" name="userId" class="form-control form-control-lg" placeholder="" maxlength="20" onchange="duplicationCheckByUserId(this.value)" required >
-                    <br>
-                    <div class="col-lg-12" style="margin-top:5px; display:none;" id="idDuplicatedMessageDiv"><p><b style="color:red"><i class="mdi mdi mdi-close-box-outline text-danger"></i> 이미 존재하는 아이디 입니다.</b></p></div>
+                    <input type="text" id="userId" name="userId" class="form-control form-control-lg" maxlength="20">
                   </div>
                 </div>
                 <div class="form-group">
@@ -120,7 +117,7 @@
                         <i class="mdi mdi-lock-outline text-primary"></i>
                       </span>
                     </div>
-                    <input type="password" name="password" class="form-control form-control-lg" maxlength="20" placeholder="" onkeyup="passwordCheck()" required>
+                    <input type="password" name="password" class="form-control form-control-lg" maxlength="20" onkeyup="passwordCheck()">
                   </div>
                 </div>
                <div class="form-group">
@@ -131,9 +128,11 @@
                         <i class="mdi mdi-lock-outline text-primary"></i>
                       </span>
                     </div>
-                    <input type="password" name="passwordConfirm" class="form-control form-control-lg" maxlength="20"  placeholder="" onkeyup="passwordCheck()" required>
+                    <input type="password" name="passwordConfirm" class="form-control form-control-lg" maxlength="20" onkeyup="passwordCheck()">
                     <br>
-                    <div class="col-lg-12" style="margin-top:5px; display:none;" id="passwordCheckMessageDiv"><p><b style="color:red"><i class="mdi mdi mdi-close-box-outline text-danger"></i> 비밀번호가 동일하지 않습니다.</b></p></div>
+                    <div class="col-lg-12" style="margin-top:5px; display:none;" id="passwordCheckMessageDiv">
+                        <p><b style="color:red"><i class="mdi mdi mdi-close-box-outline text-danger"></i> 비밀번호가 동일하지 않습니다.</b></p>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -144,7 +143,7 @@
                         <i class="mdi mdi-email-outline text-primary"></i>
                       </span>
                     </div>
-                    <input type="email" name="email" class="form-control form-control-lg" id="exampleInputEmail1" maxlength="100" placeholder="" required>
+                    <input type="email" id="email" name="email" class="form-control form-control-lg" maxlength="100" placeholder="" required>
                   </div>
                 </div>
                 <div class="mb-4">
@@ -156,7 +155,7 @@
                   </div>
                 </div>
                 <div class="mt-3">
-                  <a class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" href="#" onclick="createUser()">회원가입</a>
+                  <a class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" href="#" onclick="validateForSignUp()">회원가입</a>
                 </div>
                 <div class="text-center mt-4 font-weight-light">
                   이미 아이디가 존재 합니까 ? <a href="login" class="text-primary">로그인</a>
