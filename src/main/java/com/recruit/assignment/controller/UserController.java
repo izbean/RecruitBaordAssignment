@@ -58,10 +58,10 @@ public class UserController {
 		return null;
 	}
 
-	@ResponseBody
-	@PostMapping("/login")
-	public UserResponseDto loginUser(@Valid UserRequestDto userRequestDto) {
-		return userService.loginUser(userRequestDto);
-	}
+//	@ResponseBody
+//	@PostMapping("/login")
+//	public UserResponseDto loginUser(@Valid UserRequestDto userRequestDto) {
+//		return userService.loginUser(userRequestDto);
+//	}
 	
 }

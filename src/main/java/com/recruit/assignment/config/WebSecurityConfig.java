@@ -10,8 +10,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -36,10 +43,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Login.
                 .and()
                 .formLogin()
+                .usernameParameter("userId")
+                .passwordParameter("password")
                 .loginPage("/user/login")
                 .failureHandler(loginFailureHandler())
-                .failureUrl("/user/login?error")
-                .failureForwardUrl("/user/login?error")
                 .defaultSuccessUrl("/board/list")
                 // Logout.
                 .and()
@@ -47,12 +54,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/user/login")
                 .invalidateHttpSession(true)
                 .and()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new AuthenticationEntryPoint() {
+//                    @Override
+//                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+//                        request.setAttribute("errorMessage", authException.getMessage());
+//                        response.sendRedirect("user/login");
+//                    }
+//                })
         ;
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/h2-console/**");
+        web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/h2-console/**", "/error");
     }
 
 }

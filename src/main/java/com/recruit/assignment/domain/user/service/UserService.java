@@ -91,7 +91,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUserId(username);
 
-        if (user == null) throw new AuthenticationCredentialsNotFoundException(username);
+        if (user == null) throw new UsernameNotFoundException(username);
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getAuthority()));
