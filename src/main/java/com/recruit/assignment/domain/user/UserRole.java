@@ -1,5 +1,14 @@
 package com.recruit.assignment.domain.user;
 
+import lombok.Getter;
+
+@Getter
 public enum UserRole {
-    USER, ADMIN
+    USER("ROLE_USER"), ADMIN("ROLE_USER");
+
+    private final String name;
+
+    UserRole(String name) {
+        this.name = name;
+    }
 }

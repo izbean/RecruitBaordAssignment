@@ -3,6 +3,7 @@ package com.recruit.assignment.domain.user;
 import com.recruit.assignment.domain.board.Board;
 import com.recruit.assignment.domain.board.BoardComment;
 import lombok.*;
+import org.springframework.util.Assert;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Getter @Setter @ToString
+@Getter @Setter
 @NoArgsConstructor
 public class User {
 	
@@ -34,7 +35,7 @@ public class User {
 	@NotEmpty
 	private String password;
 
-	private String authority = UserRole.USER.name();
+	private String authority = UserRole.USER.getName();
 
 	private String email;
 
@@ -42,12 +43,17 @@ public class User {
 
 	private LocalDateTime modifyDateTime;
 
+	@Builder(builderClassName = "onlyUserIdBuilder", builderMethodName = "onlyUserIdBuilder")
 	public User(String userId) {
 		this.userId = userId;
 	}
 
-	@Builder
+	@Builder(builderClassName = "createUserBuilder", builderMethodName = "createUserBuilder")
 	public User(String userId, String password, String email) {
+		Assert.hasText(userId, "userId must be not empty");
+		Assert.hasText(password, "password must be not empty");
+		Assert.hasText(email, "email must be not empty");
+
 		this.userId = userId;
 		this.password = password;
 		this.email = email;

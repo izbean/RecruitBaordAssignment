@@ -10,7 +10,9 @@ import com.recruit.assignment.domain.user.exception.UserNotFoundException;
 import com.recruit.assignment.utils.password.PasswordEncoderUtils;
 import com.recruit.assignment.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +20,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.recruit.assignment.domain.user.User;
@@ -26,6 +30,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -50,25 +55,27 @@ public class UserService implements UserDetailsService {
     // 회원가입
     @Transactional
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
+        User user = User.createUserBuilder()
+                .userId(userRequestDto.getUserId())
+                .password(new BCryptPasswordEncoder().encode(userRequestDto.getPassword()))
+                .email(userRequestDto.getEmail())
+                .build();
+
+        userRepository.save(user);
+
         return UserResponseDto.builder()
                 .code(HttpStatus.OK)
-                .user(User.builder()
-                        .userId(userRequestDto.getUserId())
-                        .password(userRequestDto.getPassword())
-                        .email(userRequestDto.getEmail())
-                        .build())
+                .user(user)
                 .build();
     }
 
     public UserResponseDto loginUser(UserRequestDto userRequestDto) {
-        String userId = userRequestDto.getUserId();
-        String password = userRequestDto.getUserId();
 
-        UserDetails userDetails = loadUserByUserIdByPassword(userId, password);
+        loadUserByUsername(userRequestDto.getUserId());
 
         return UserResponseDto.builder()
                 .code(HttpStatus.OK)
-                .user(User.builder().userId(userDetails.getUsername()).build())
+                .user(User.onlyUserIdBuilder().userId(userRequestDto.getUserId()).build())
                 .build();
     }
 

@@ -20,7 +20,7 @@ public class UserResponseDto {
     public UserResponseDto(HttpStatus code, String message, User user)  {
         this.code = code;
         this.message = message;
-        this.user = User.builder().userId(user.getUserId()).build();
+        this.user = User.onlyUserIdBuilder().userId(user.getUserId()).build();
     }
 
 }

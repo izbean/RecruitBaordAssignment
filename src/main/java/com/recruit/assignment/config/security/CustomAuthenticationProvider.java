@@ -1,6 +1,7 @@
 package com.recruit.assignment.config.security;
 
 import com.recruit.assignment.domain.user.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
@@ -29,8 +31,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         UserDetails userDetails = userService.loadUserByUsername(userId);
 
-        if (userDetails == null || this.passwordEncoder.matches(password, userDetails.getPassword()))
-            throw new BadCredentialsException("user not found or password not equals");
+        log.debug("userDetails: {}", userDetails);
+        log.debug("userId: {}", userId);
+        log.debug("password: {}", password);
+
+        if (this.passwordEncoder.matches(password, userDetails.getPassword()))
+            throw new BadCredentialsException("password not equals");
 
         return new UsernamePasswordAuthenticationToken(userId, password, userDetails.getAuthorities());
     }

@@ -53,6 +53,9 @@
     }
 
     function createUser() {
+
+        console.log($('#signUpForm').serialize());
+
         $.ajax({
           url: '/user',
           method: 'POST',
