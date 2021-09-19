@@ -1,4 +1,4 @@
-package com.recruit.assignment.config.exception;
+package com.recruit.assignment.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

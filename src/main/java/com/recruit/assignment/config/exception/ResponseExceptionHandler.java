@@ -14,35 +14,35 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
-@RequiredArgsConstructor
-@ControllerAdvice
+//@Slf4j
+//@RequiredArgsConstructor
+//@ControllerAdvice
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private final ObjectMapper objectMapper;
-
-    @ExceptionHandler({InternalException.class})
-    public ResponseEntity<Object> handlerInternalException(InternalException ex, WebRequest request) {
-        return handlerInternalException(ex, ex.getHttpStatus(), ex.getErrorCode(), ex.getMessage(), ex.getDescription(), request);
-    }
-
-    private ResponseEntity<Object> handlerInternalException(Exception ex, HttpStatus httpstatus, ErrorCode errorCode, String message, Object description, WebRequest request) {
-        if (description instanceof Map) {
-            try {
-                description = objectMapper.writeValueAsString(description);
-            } catch (Exception e) {
-                log.debug("Failed to serialize description.", e);
-            }
-        }
-
-        HashMap<String, Object> body = new HashMap<>();
-        body.put("code", errorCode);
-        body.put("message", message);
-        body.put("description", description);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-
-        return super.handleExceptionInternal(ex, body, httpHeaders, httpstatus, request);
-    }
+//    private final ObjectMapper objectMapper;
+//
+//    @ExceptionHandler({InternalException.class})
+//    public ResponseEntity<Object> handlerInternalException(InternalException ex, WebRequest request) {
+//        return handlerInternalException(ex, ex.getHttpStatus(), ex.getErrorCode(), ex.getMessage(), ex.getDescription(), request);
+//    }
+//
+//    private ResponseEntity<Object> handlerInternalException(Exception ex, HttpStatus httpstatus, ErrorCode errorCode, String message, Object description, WebRequest request) {
+//        if (description instanceof Map) {
+//            try {
+//                description = objectMapper.writeValueAsString(description);
+//            } catch (Exception e) {
+//                log.debug("Failed to serialize description.", e);
+//            }
+//        }
+//
+//        HashMap<String, Object> body = new HashMap<>();
+//        body.put("code", errorCode);
+//        body.put("message", message);
+//        body.put("description", description);
+//
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//
+//        return super.handleExceptionInternal(ex, body, httpHeaders, httpstatus, request);
+//    }
 
 }

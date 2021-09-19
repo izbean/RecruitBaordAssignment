@@ -49,6 +49,7 @@ public class UserController {
 	@ResponseBody
 	@PostMapping
 	public UserResponseDto createUser(@Valid UserRequestDto userRequestDto) {
+		log.debug("{}", userRequestDto);
 		return userService.createUser(userRequestDto);
 	}
 

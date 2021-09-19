@@ -29,7 +29,7 @@
                 <div class="form-group">
                   <input type="password" class="form-control form-control-lg" name="password" placeholder="비밀번호">
                 </div>
-                <p th:if="${#request.getAttribute('errorMessage')}!=null">
+                <p th:if="${#request.getAttribute('errorMessage')} != null">
                   <i class="mdi mdi mdi-close-box-outline text-danger"></i>
                   <b style="color:red" th:text="${#request.getAttribute('errorMessage')}"></b>
                 </p>
