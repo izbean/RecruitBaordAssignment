@@ -1,17 +1,15 @@
 package com.recruit.assignment.domain.board;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.*;
 
 import com.recruit.assignment.domain.user.User;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
-@Getter @Setter @ToString
+@Getter @ToString
 @NoArgsConstructor
 public class Board {
 
@@ -21,12 +19,16 @@ public class Board {
 
 	private String category;
 
-	@OneToOne(mappedBy = "board")
-	private BoardContents boardContents;
+	@OneToMany(mappedBy = "board")
+	private List<BoardComment> comments;
 
-	private boolean isDeleted;
+	private String title;
 
-	private boolean isBlocked;
+	private String contents;
+
+	private boolean isDeleted = false;
+
+	private boolean isBlocked = false;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "created_user")
@@ -40,4 +42,23 @@ public class Board {
 
 	private LocalDateTime modifiedDate;
 
+	public void delete() {
+		this.isDeleted = true;
+	}
+
+	public void update(String title, String category, String contents, String userId) {
+		this.title = title;
+		this.category = category;
+		this.contents = contents;
+		this.createdUser = User.onlyUserIdBuilder().userId(userId).build();
+	}
+
+	@Builder(builderClassName = "create", builderMethodName = "create")
+	public Board(String title, String category, String contents, String userId) {
+		this.title = title;
+		this.category = category;
+		this.contents = contents;
+		this.createdUser = User.onlyUserIdBuilder().userId(userId).build();
+		this.createdDate = LocalDateTime.now();
+	}
 }

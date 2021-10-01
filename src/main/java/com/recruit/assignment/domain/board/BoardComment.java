@@ -17,8 +17,8 @@ public class BoardComment {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_contents_id")
-    private BoardContents boardContents;
+    @JoinColumn(name = "board_id")
+    private Board board;
 
     private String comment;
 

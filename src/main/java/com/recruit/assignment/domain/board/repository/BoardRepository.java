@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.recruit.assignment.domain.board.Board;
 
 @Repository
-public interface BoardRepository extends JpaRepository<Board, Integer>{
-
+public interface BoardRepository extends JpaRepository<Board, Long>{
+    
 }
