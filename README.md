@@ -1,4 +1,4 @@
-# RecruitBoardAssignment
+# private board
 
 Stack
   - Spring boot 
