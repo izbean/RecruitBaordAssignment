@@ -46,19 +46,22 @@ public class Board {
 		this.isDeleted = true;
 	}
 
-	public void update(String title, String category, String contents, String userId) {
+	public void block() { this.isBlocked = true; }
+
+	public void update(String title, String category, String contents, User user) {
 		this.title = title;
 		this.category = category;
 		this.contents = contents;
-		this.createdUser = User.onlyUserIdBuilder().userId(userId).build();
+		this.modifiedUser = user;
+		this.modifiedDate = LocalDateTime.now();
 	}
 
 	@Builder(builderClassName = "create", builderMethodName = "create")
-	public Board(String title, String category, String contents, String userId) {
+	public Board(String title, String category, String contents, User user) {
 		this.title = title;
 		this.category = category;
 		this.contents = contents;
-		this.createdUser = User.onlyUserIdBuilder().userId(userId).build();
+		this.createdUser = user;
 		this.createdDate = LocalDateTime.now();
 	}
 }

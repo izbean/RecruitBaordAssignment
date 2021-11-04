@@ -48,8 +48,9 @@ public class BoardService {
 		String requestedUserId = boardUpdateRequestDto.getUserId();
 
 		Board board = checkedAccess(boardUpdateRequestDto.getBoardId(), requestedUserId);
+		User user = board.getCreatedUser();
 
-		board.update(boardUpdateRequestDto.getTitle(), boardUpdateRequestDto.getCategory(), boardUpdateRequestDto.getContents(), requestedUserId);
+		board.update(boardUpdateRequestDto.getTitle(), boardUpdateRequestDto.getCategory(), boardUpdateRequestDto.getContents(), user);
 
 		return boardRepository.save(board).getId();
 	}
