@@ -1,10 +1,11 @@
-# private board
+# spring boot board
 
 Stack
   - Spring boot 
   - Spring Data Jpa 
   - Spring Security
   - ThymeLeaf
+  - Lombok
   
 Database
   - H2
