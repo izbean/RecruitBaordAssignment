@@ -7,20 +7,10 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Data
+@Builder
 @NoArgsConstructor
 public class UserResponseDto {
 
-    private HttpStatus code;
-
-    private String message;
-
-    private User user;
-
-    @Builder
-    public UserResponseDto(HttpStatus code, String message, User user)  {
-        this.code = code;
-        this.message = message;
-        this.user = User.onlyUserIdBuilder().userId(user.getUserId()).build();
-    }
+    private String userId;
 
 }

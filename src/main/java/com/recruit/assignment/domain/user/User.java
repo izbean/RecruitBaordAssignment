@@ -2,12 +2,11 @@ package com.recruit.assignment.domain.user;
 
 import com.recruit.assignment.domain.board.Board;
 import com.recruit.assignment.domain.board.BoardComment;
+import com.recruit.assignment.domain.user.dto.UserResponseDto;
 import lombok.*;
 import org.springframework.util.Assert;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,7 +34,8 @@ public class User {
 	@NotEmpty
 	private String password;
 
-	private String authority = UserRole.USER.getName();
+	@Enumerated(value = EnumType.STRING)
+	private String authority = UserRole.USER.name();
 
 	private String email;
 
@@ -58,5 +58,11 @@ public class User {
 		this.password = password;
 		this.email = email;
 		this.createDateTime = LocalDateTime.now();
+	}
+
+	public static UserResponseDto of(User user) {
+		return UserResponseDto.builder()
+				.userId(user.getUserId())
+				.build();
 	}
 }

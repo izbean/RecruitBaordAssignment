@@ -2,9 +2,11 @@ package com.recruit.assignment.domain.board;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
+import com.recruit.assignment.domain.board.dto.response.BoardResponseDto;
 import com.recruit.assignment.domain.user.User;
 import lombok.*;
 
@@ -63,5 +65,21 @@ public class Board {
 		this.contents = contents;
 		this.createdUser = user;
 		this.createdDate = LocalDateTime.now();
+	}
+
+	public static BoardResponseDto of(Board board) {
+		return BoardResponseDto.builder()
+				.id(board.getId())
+				.title(board.getTitle())
+				.contents(board.getContents())
+				.comments(board.getComments().stream()
+						.map(BoardComment::of)
+						.collect(Collectors.toList()))
+				.commentCount(board.getComments().size())
+				.createUser(User.of(board.getCreatedUser()))
+				.modifiedUser(User.of(board.getModifiedUser()))
+				.createDateTime(board.getCreatedDate())
+				.modifiedDateTime(board.getModifiedDate())
+				.build();
 	}
 }

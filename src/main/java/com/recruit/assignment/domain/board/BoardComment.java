@@ -1,14 +1,15 @@
 package com.recruit.assignment.domain.board;
 
+import com.recruit.assignment.domain.board.dto.response.BoardCommentResponseDto;
 import com.recruit.assignment.domain.user.User;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor
 public class BoardComment {
 
@@ -37,5 +38,18 @@ public class BoardComment {
     private User modifiedUser;
 
     private LocalDateTime modifiedDate;
+
+    public static BoardCommentResponseDto of(BoardComment boardComment) {
+        return BoardCommentResponseDto.builder()
+                .id(boardComment.getId())
+                .comment(boardComment.getComment())
+                .isBlocked(boardComment.isBlocked())
+                .isDeleted(boardComment.isDeleted())
+                .createUser(User.of(boardComment.getCreatedUser()))
+                .createDate(boardComment.getCreatedDate())
+                .modifiedUser(User.of(boardComment.getModifiedUser()))
+                .modifiedDate(boardComment.getModifiedDate())
+                .build();
+    }
 
 }

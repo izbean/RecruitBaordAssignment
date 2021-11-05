@@ -1,8 +1,6 @@
 package com.recruit.assignment.controller;
 
-import com.recruit.assignment.domain.board.dto.BoardCreateRequestDto;
-import com.recruit.assignment.domain.board.dto.BoardResponseDto;
-import com.recruit.assignment.domain.board.dto.BoardUpdateRequestDto;
+import com.recruit.assignment.domain.board.dto.request.BoardRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -21,29 +19,27 @@ public class BoardController {
 
     @PostMapping
     public Long create(
-            @Valid BoardCreateRequestDto boardCreateRequestDto,
+            @Valid BoardRequestDto boardRequestDto,
             @AuthenticationPrincipal User user
     ) {
-        boardCreateRequestDto.setUserId(user.getUsername());
-        return boardService.create(boardCreateRequestDto);
+        return boardService.create(boardRequestDto, user.getUsername());
     }
 
-    @PutMapping("/{boardContentsId}")
+    @PutMapping("/{id}")
     public Long update(
-            @PathVariable long boardContentsId,
-            @Valid BoardUpdateRequestDto boardUpdateRequestDto,
+            @PathVariable long id,
+            @Valid BoardRequestDto boardRequestDto,
             @AuthenticationPrincipal User user
     ) {
-        boardUpdateRequestDto.setUserId(user.getUsername());
-        return boardService.update(boardUpdateRequestDto);
+        return boardService.update(id, boardRequestDto, user.getUsername());
     }
 
-    @DeleteMapping("/{boardId}")
+    @DeleteMapping("/{id}")
     public Long delete(
-            @PathVariable long boardId,
+            @PathVariable long id,
             @AuthenticationPrincipal User user
     ) {
-        return boardService.delete(boardId, user.getUsername());
+        return boardService.delete(id, user.getUsername());
     }
 
 }

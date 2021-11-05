@@ -37,22 +37,21 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    // 아이디 중복 체크
     public boolean existsById(String userId) {
         return userRepository.existsById(userId);
     }
 
-    // 사용자 정보 조회
     public UserResponseDto getUser(String userId) {
         Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isEmpty())
             throw new UserNotFoundException(userId);
 
-        return UserResponseDto.builder().user(userOptional.get()).build();
+        return UserResponseDto.builder()
+                .userId(userOptional.get().getUserId())
+                .build();
     }
 
-    // 회원가입
     @Transactional
     public UserResponseDto createUser(UserRequestDto userRequestDto) {
         User user = User.createUserBuilder()
@@ -64,35 +63,9 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
         return UserResponseDto.builder()
-                .code(HttpStatus.OK)
-                .user(user)
+                .userId(user.getUserId())
                 .build();
     }
-
-    public UserResponseDto loginUser(UserRequestDto userRequestDto) {
-
-        loadUserByUsername(userRequestDto.getUserId());
-
-        return UserResponseDto.builder()
-                .code(HttpStatus.OK)
-                .user(User.onlyUserIdBuilder().userId(userRequestDto.getUserId()).build())
-                .build();
-    }
-
-    // 로그인
-    public UserDetails loadUserByUserIdByPassword(String userId, String password) throws AuthenticationCredentialsNotFoundException {
-        Optional<User> userOptional = userRepository.findByUserIdAndPassword(userId, password);
-
-        if (userOptional.isEmpty()) throw new AuthenticationCredentialsNotFoundException("아이디나 패스워드가 일치하지 않습니다.");
-
-        User user = userOptional.get();
-
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getAuthority()));
-
-        return new org.springframework.security.core.userdetails.User(user.getUserId(), user.getPassword(), authorities);
-    }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

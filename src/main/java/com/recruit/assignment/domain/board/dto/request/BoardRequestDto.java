@@ -1,12 +1,13 @@
-package com.recruit.assignment.domain.board.dto;
+package com.recruit.assignment.domain.board.dto.request;
 
 import com.recruit.assignment.domain.board.Board;
+import com.recruit.assignment.domain.user.User;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class BoardCreateRequestDto {
+public class BoardRequestDto {
 
     @NotEmpty
     private String title;
@@ -24,6 +25,15 @@ public class BoardCreateRequestDto {
                 .title(title)
                 .category(category)
                 .contents(contents)
+                .build();
+    }
+
+    public Board toEntityWithUser(User user) {
+        return Board.create()
+                .title(title)
+                .category(category)
+                .contents(contents)
+                .user(user)
                 .build();
     }
 

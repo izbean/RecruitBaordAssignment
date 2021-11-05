@@ -1,25 +1,29 @@
 package com.recruit.assignment.domain.board.service;
 
 import com.recruit.assignment.domain.board.Board;
-import com.recruit.assignment.domain.board.dto.BoardCreateRequestDto;
-import com.recruit.assignment.domain.board.dto.BoardUpdateRequestDto;
+import com.recruit.assignment.domain.board.dto.request.BoardRequestDto;
+import com.recruit.assignment.domain.board.dto.response.BoardResponseDto;
 import com.recruit.assignment.domain.board.exception.BoardContentNotFoundException;
 import com.recruit.assignment.domain.board.repository.BoardRepository;
 import com.recruit.assignment.domain.user.User;
+import com.recruit.assignment.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BoardService {
 
 	private final BoardRepository boardRepository;
+
+	private final UserRepository userRepository;
 
 	public Board getBoardContentDetail(long boardContentId) {
 
@@ -35,22 +39,23 @@ public class BoardService {
 		return board;
 	}
 
-	public Page<Board> getByBoardList(Pageable pageable) {
+	public List<BoardResponseDto> getByBoardList(Pageable pageable) {
 		pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1 , pageable.getPageSize());
-		return boardRepository.findAll(pageable);
+		return boardRepository.findAll(pageable).stream()
+				.map(Board::of)
+				.collect(Collectors.toList());
 	}
 
-	public Long create(BoardCreateRequestDto boardRequestDto) {
-		return boardRepository.save(boardRequestDto.toEntity()).getId();
+	public Long create(BoardRequestDto boardRequestDto, String requestedUserId) {
+		User user = userRepository.getOne(requestedUserId);
+		return boardRepository.save(boardRequestDto.toEntityWithUser(user)).getId();
 	}
 
-	public Long update(BoardUpdateRequestDto boardUpdateRequestDto) {
-		String requestedUserId = boardUpdateRequestDto.getUserId();
-
-		Board board = checkedAccess(boardUpdateRequestDto.getBoardId(), requestedUserId);
+	public Long update(long id, BoardRequestDto boardRequestDto, String requestedUserId) {
+		Board board = checkedAccess(id, requestedUserId);
 		User user = board.getCreatedUser();
 
-		board.update(boardUpdateRequestDto.getTitle(), boardUpdateRequestDto.getCategory(), boardUpdateRequestDto.getContents(), user);
+		board.update(boardRequestDto.getTitle(), boardRequestDto.getCategory(), boardRequestDto.getContents(), user);
 
 		return boardRepository.save(board).getId();
 	}

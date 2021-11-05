@@ -1,4 +1,4 @@
-package com.recruit.assignment.domain.board.dto;
+package com.recruit.assignment.domain.board.dto.request;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
