@@ -35,7 +35,7 @@ public class User {
 	private String password;
 
 	@Enumerated(value = EnumType.STRING)
-	private String authority = UserRole.USER.name();
+	private UserRole authority = UserRole.USER;
 
 	private String email;
 

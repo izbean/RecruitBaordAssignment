@@ -13,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -60,10 +62,8 @@ public class UserService implements UserDetailsService {
                 .email(userRequestDto.getEmail())
                 .build();
 
-        userRepository.save(user);
-
         return UserResponseDto.builder()
-                .userId(user.getUserId())
+                .userId(userRepository.save(user).getUserId())
                 .build();
     }
 
@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
         if (user == null) throw new UsernameNotFoundException(username);
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getAuthority()));
+        authorities.add(new SimpleGrantedAuthority(user.getAuthority().name()));
 
         return new org.springframework.security.core.userdetails.User(user.getUserId(), user.getPassword(), authorities);
     }

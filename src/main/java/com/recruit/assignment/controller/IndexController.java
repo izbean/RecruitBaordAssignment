@@ -18,21 +18,22 @@ public class IndexController {
     @GetMapping("/")
     public String index(@PageableDefault Pageable pageable, Model model) {
         model.addAttribute("boardList", boardService.getByBoardList(pageable));
+        model.addAttribute("postCount", boardService.getPostCount());
         return "/index";
     }
 
-    @GetMapping("/board/create")
+    @GetMapping("/post/create")
     public String form() {
-        return "/board/form";
+        return "/post/form";
     }
 
-    @GetMapping("/board/{boardContentId}")
+    @GetMapping("/post/{boardContentId}")
     public String getBoardContentDetail(
             @PathVariable int boardContentId,
             Model model
     ) {
         model.addAttribute("ContentDetail", boardService.getBoardContentDetail(boardContentId));
-        return "/board/detail";
+        return "/post/detail";
     }
 
     @GetMapping("/login")

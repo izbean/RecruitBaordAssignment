@@ -14,7 +14,7 @@
 <body>
      <header th:fragment="header">
         <nav class="navbar navbar-inverse">
-            <a class="navbar-brand" href="/board/list">Simple Board</a>
+            <a class="navbar-brand" href="/">Board</a>
         </nav>
     </header>
     
@@ -22,8 +22,11 @@
         <div class="page-header">
             <h1>게시글 목록</h1>
         </div>
+        <div class="pull-left" style="width:100px;margin:10px 0;">
+            <a href="/user/login" class="btn btn-primary btn-block">로그인</a>
+        </div>
         <div class="pull-right" style="width:100px;margin:10px 0;">
-            <a href="/board/form" class="btn btn-primary btn-block">등록</a>
+            <a href="/post/create" class="btn btn-primary btn-block">게시글 등록</a>
         </div>
         <div class="container-fluid">
             <div class="row">
@@ -39,44 +42,56 @@
                     </thead>
                     <tbody>
                         <tr th:each="board : ${boardList}">
-                            <td th:text="${board.idx}"></td>
-                            <td><a th:href="'/board/detail?idx='+${board.idx}" th:text="${board.title}"></a></td>
-                            <td th:text="${board.createId}"></td>
+                            <td th:text="${board.id}"></td>
+                            <td><a th:href="'/post/'+ ${board.id}" th:text="${board.title}"></a></td>
+                            <td th:text="${board.createUser.userId}"></td>
                             <td th:text="${#temporals.format(board.createDateTime, 'yyyy-MM-dd HH:mm:dd')}"></td>
-                            <td th:text="${#temporals.format(board.modifyDateTime, 'yyyy-MM-dd HH:mm:dd')}"></td>
+                            <td th:text="${#temporals.format(board.modifiedDateTime, 'yyyy-MM-dd HH:mm:dd')}"></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <!-- pagination -->
             <nav class="navbar" aria-label="Page navigation" style="text-align: center; margin: 0 40% 0 40%">
-                <ul class="pagination" 
-                    th:with="startNumber=(${T(Math).floor(boardList.number/10)} * 10) + 1 ,
-                            endNumber=(${boardList.totalPages} > ${startNumber} + 9) ? ${startNumber} + 9 : ${boardList.totalPages} ,
-                            endNumber=(${endNumber} == 0) ? 1 : ${endNumber}
+                <ul class="pagination"
+                    th:with="startNumber=(${T(Math).floor(postCount / 10)} * 10) + 1 ,
+                            totalPages = ${T(Math).floor(postCount / 10)},
+                            endNumber=(${totalPages} > ${startNumber} + 9) ? ${startNumber} + 9 : ${totalPages} ,
+                            endNumber=(${endNumber} == 0) ? 1 : ${endNumber},
+                            page=${#request.getParameter('page')}
                             ">
-                    
-                    <li class="page-item" th:style="${boardList.first} ? 'display:none'">
-                    	<a class="page-link" href="/board/list?page=1">&laquo;</a>
+
+                    <li class="page-item" th:style="${startNumber} ? 'display:none'">
+                    	<a class="page-link" href="/?page=1">&laquo;</a>
                     </li>
-                    <li class="page-item" th:style="${boardList.first} ? 'display:none'">
-                        <a class="page-link" th:href="@{/board/list(page=${boardList.number})}">&lsaquo;</a>
+                    <li class="page-item" th:style="${startNumber} ? 'display:none'">
+                        <a class="page-link" th:href="@{/templates/index(page=${page})}">&lsaquo;</a>
                     </li>
-                    <li class="page-item" th:each="page : ${#numbers.sequence(startNumber, endNumber)}"
-                        th:class="(${page} == ${boardList.number} + 1) ? 'page-item active'">
-                        <a class="page-link" th:href="@{/board/list(page=${page})}" th:text="${page}">
+                    <li class="page-item" th:each="pageNum : ${#numbers.sequence(startNumber, endNumber)}"
+--                        th:class="(${pageNum} == ${page}) ? 'page-item active'">
+                        <a class="page-link" th:href="@{/(page=${pageNum})}" th:text="${pageNum}">
                             <span class="sr-only"></span>
                         </a>
                     </li>
-                    <li class="page-item" th:style="${boardList.last} ? 'display:none'">
-                        <a class="page-link" th:href="@{/board/list(page=${boardList.number} + 2)}">&rsaquo;</a>
+                    <li class="page-item" th:style="${endNumber} ? 'display:none'">
+                        <a class="page-link" th:href="@{/templates/index(page=${page} + 2)}">&rsaquo;</a>
                     </li>
-                    <li class="page-item" th:style="${boardList.last} ? 'display:none'">
-                        <a class="page-link" th:href="@{/board/list(page=${boardList.totalPages})}">&raquo;</a>
+                    <li class="page-item" th:style="${endNumber} ? 'display:none'">
+                        <a class="page-link" th:href="@{/(page=${endNumber})}">&raquo;</a>
                     </li>
                 </ul>
             </nav>
         </div>
     </div>
 </body>
+<script>
+    let prevItem = null;
+
+    const index = {
+        pageItemClick: function(item) {
+            prevItem.removeClass('active');
+            item.addClass('active');
+        }
+    }
+</script>
 </html>

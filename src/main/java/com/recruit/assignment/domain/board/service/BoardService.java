@@ -41,9 +41,14 @@ public class BoardService {
 
 	public List<BoardResponseDto> getByBoardList(Pageable pageable) {
 		pageable = PageRequest.of(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1 , pageable.getPageSize());
+
 		return boardRepository.findAll(pageable).stream()
 				.map(Board::of)
 				.collect(Collectors.toList());
+	}
+
+	public long getPostCount() {
+		return boardRepository.count();
 	}
 
 	public Long create(BoardRequestDto boardRequestDto, String requestedUserId) {
