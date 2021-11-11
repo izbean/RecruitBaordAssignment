@@ -16,13 +16,13 @@ import com.recruit.assignment.domain.user.service.UserService;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
 
 	private final UserService userService;
 
-	@Secured({UserRole.Role.ADMIN})
+	@Secured({UserRole.Role.ADMIN, UserRole.Role.USER})
 	@GetMapping("/{id}")
 	public UserResponseDto getUser(@PathVariable("id") String userId) {
 		return userService.getUser(userId);

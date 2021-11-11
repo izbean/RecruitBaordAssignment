@@ -19,7 +19,7 @@
         let isDuplicatedByUserId = true;
 
         $.ajax({
-            url: '/user/check/' + userId,
+            url: '/api/v1/check/' + userId,
             method: 'GET',
             async : false,
             dataType: 'json',
@@ -57,7 +57,7 @@
         console.log($('#signUpForm').serialize());
 
         $.ajax({
-          url: '/user',
+          url: '/api/v1/user',
           method: 'POST',
           async : false,
           data : $('#signUpForm').serialize(),
