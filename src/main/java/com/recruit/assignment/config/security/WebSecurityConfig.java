@@ -48,14 +48,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .loginPage("/user/login")
                 .failureHandler(loginFailureHandler())
-                .defaultSuccessUrl("/board/")
+                .failureForwardUrl("/login")
+                .defaultSuccessUrl("/")
                 // Logout.
                 .and()
                 .logout()
-                .logoutSuccessUrl("/user/login")
-                .invalidateHttpSession(true)
-                .and()
-        ;
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true);
     }
 
     @Override

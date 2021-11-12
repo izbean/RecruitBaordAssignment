@@ -19,7 +19,7 @@
         let isDuplicatedByUserId = true;
 
         $.ajax({
-            url: '/api/v1/check/' + userId,
+            url: '/api/v1/user/check/' + userId,
             method: 'GET',
             async : false,
             dataType: 'json',
@@ -64,7 +64,7 @@
           dataType : 'json',
           success : function (res) {
               alert("계정 생성이 완료 되었습니다.");
-              location.href = "/user/login";
+              location.href = "/login";
           },
           error: function (xhr) {
               alert("fail");
