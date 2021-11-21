@@ -1,6 +1,6 @@
-package com.recruit.assignment.domain.board;
+package com.recruit.assignment.domain.post;
 
-import com.recruit.assignment.domain.board.dto.response.BoardCommentResponseDto;
+import com.recruit.assignment.domain.post.dto.response.PostCommentResponse;
 import com.recruit.assignment.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-public class BoardComment {
+public class PostComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,7 @@ public class BoardComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    private Board board;
+    private Post post;
 
     private String comment;
 
@@ -39,16 +39,16 @@ public class BoardComment {
 
     private LocalDateTime modifiedDate;
 
-    public static BoardCommentResponseDto of(BoardComment boardComment) {
-        return BoardCommentResponseDto.builder()
-                .id(boardComment.getId())
-                .comment(boardComment.getComment())
-                .isBlocked(boardComment.isBlocked())
-                .isDeleted(boardComment.isDeleted())
-                .createUser(User.of(boardComment.getCreatedUser()))
-                .createDate(boardComment.getCreatedDate())
-                .modifiedUser(User.of(boardComment.getModifiedUser()))
-                .modifiedDate(boardComment.getModifiedDate())
+    public static PostCommentResponse of(PostComment postComment) {
+        return PostCommentResponse.builder()
+                .id(postComment.getId())
+                .comment(postComment.getComment())
+                .isBlocked(postComment.isBlocked())
+                .isDeleted(postComment.isDeleted())
+                .createUser(User.of(postComment.getCreatedUser()))
+                .createDate(postComment.getCreatedDate())
+                .modifiedUser(User.of(postComment.getModifiedUser()))
+                .modifiedDate(postComment.getModifiedDate())
                 .build();
     }
 

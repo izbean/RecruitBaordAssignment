@@ -53,9 +53,6 @@
     }
 
     function createUser() {
-
-        console.log($('#signUpForm').serialize());
-
         $.ajax({
           url: '/api/v1/user',
           method: 'POST',
@@ -64,7 +61,7 @@
           dataType : 'json',
           success : function (res) {
               alert("계정 생성이 완료 되었습니다.");
-              location.href = "/login";
+              location.href = "/user/login";
           },
           error: function (xhr) {
               alert("fail");

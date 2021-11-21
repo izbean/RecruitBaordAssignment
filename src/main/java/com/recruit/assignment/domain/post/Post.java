@@ -1,4 +1,4 @@
-package com.recruit.assignment.domain.board;
+package com.recruit.assignment.domain.post;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -6,23 +6,23 @@ import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
-import com.recruit.assignment.domain.board.dto.response.BoardResponseDto;
+import com.recruit.assignment.domain.post.dto.response.PostResponse;
 import com.recruit.assignment.domain.user.User;
 import lombok.*;
 
 @Entity
-@Getter @ToString
+@Getter
 @NoArgsConstructor
-public class Board {
+public class Post {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 
 	private String category;
 
-	@OneToMany(mappedBy = "board")
-	private List<BoardComment> comments;
+	@OneToMany(mappedBy = "post")
+	private List<PostComment> comments;
 
 	private String title;
 
@@ -59,7 +59,7 @@ public class Board {
 	}
 
 	@Builder(builderClassName = "create", builderMethodName = "create")
-	public Board(String title, String category, String contents, User user) {
+	public Post(String title, String category, String contents, User user) {
 		this.title = title;
 		this.category = category;
 		this.contents = contents;
@@ -67,19 +67,36 @@ public class Board {
 		this.createdDate = LocalDateTime.now();
 	}
 
-	public static BoardResponseDto of(Board board) {
-		return BoardResponseDto.builder()
-				.id(board.getId())
-				.title(board.getTitle())
-				.contents(board.getContents())
-				.comments(board.getComments().stream()
-						.map(BoardComment::of)
+	public static PostResponse of(Post post) {
+		return PostResponse.builder()
+				.id(post.getId())
+				.title(post.getTitle())
+				.contents(post.getContents())
+				.comments(post.getComments().stream()
+						.map(PostComment::of)
 						.collect(Collectors.toList()))
-				.commentCount(board.getComments().size())
-				.createUser(User.of(board.getCreatedUser()))
-				.modifiedUser(User.of(board.getModifiedUser()))
-				.createDateTime(board.getCreatedDate())
-				.modifiedDateTime(board.getModifiedDate())
+				.commentCount(post.getComments().size())
+				.createUser(User.of(post.getCreatedUser()))
+				.modifiedUser(User.of(post.getModifiedUser()))
+				.createDateTime(post.getCreatedDate())
+				.modifiedDateTime(post.getModifiedDate())
 				.build();
+	}
+
+	@Override
+	public String toString() {
+		return "Board{" +
+				"id=" + id +
+				", category='" + category + '\'' +
+				", comments=" + comments +
+				", title='" + title + '\'' +
+				", contents='" + contents + '\'' +
+				", isDeleted=" + isDeleted +
+				", isBlocked=" + isBlocked +
+				", createdUser=" + createdUser +
+				", createdDate=" + createdDate +
+				", modifiedUser=" + modifiedUser +
+				", modifiedDate=" + modifiedDate +
+				'}';
 	}
 }

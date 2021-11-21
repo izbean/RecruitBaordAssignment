@@ -1,35 +1,35 @@
-package com.recruit.assignment.domain.board.dto.request;
+package com.recruit.assignment.domain.post.dto.request;
 
-import com.recruit.assignment.domain.board.Board;
+import com.recruit.assignment.domain.post.Post;
 import com.recruit.assignment.domain.user.User;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class BoardRequestDto {
+public class PostRequest {
 
-    @NotEmpty
+    @NotEmpty(message = "title cannot be empty.")
     private String title;
 
-    @NotEmpty
+    @NotEmpty(message = "category cannot be empty.")
     private String category;
 
-    @NotEmpty
+    @NotEmpty(message = "contents cannot be empty.")
     private String contents;
 
     private String userId;
 
-    public Board toEntity() {
-        return Board.create()
+    public Post toEntity() {
+        return Post.create()
                 .title(title)
                 .category(category)
                 .contents(contents)
                 .build();
     }
 
-    public Board toEntityWithUser(User user) {
-        return Board.create()
+    public Post toEntityWithUser(User user) {
+        return Post.create()
                 .title(title)
                 .category(category)
                 .contents(contents)

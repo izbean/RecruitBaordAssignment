@@ -1,7 +1,7 @@
 package com.recruit.assignment.domain.user;
 
-import com.recruit.assignment.domain.board.Board;
-import com.recruit.assignment.domain.board.BoardComment;
+import com.recruit.assignment.domain.post.Post;
+import com.recruit.assignment.domain.post.PostComment;
 import com.recruit.assignment.domain.user.dto.UserResponseDto;
 import lombok.*;
 import org.springframework.util.Assert;
@@ -20,22 +20,21 @@ public class User {
 	private String userId;
 
 	@OneToMany(mappedBy = "createdUser")
-	private List<Board> createdUserBoards;
+	private List<Post> createdUserPosts;
 
 	@OneToMany(mappedBy = "modifiedUser")
-	private List<Board> modifiedUserBoards;
+	private List<Post> modifiedUserPosts;
 
 	@OneToMany(mappedBy = "createdUser")
-	private List<BoardComment> createdUserBoardComments;
+	private List<PostComment> createdUserBoardComments;
 
 	@OneToMany(mappedBy = "modifiedUser")
-	private List<BoardComment> modifiedUserBoardComments;
+	private List<PostComment> modifiedUserBoardComments;
 
 	@NotEmpty
 	private String password;
 
-	@Enumerated(value = EnumType.STRING)
-	private UserRole authority = UserRole.USER;
+	private String authority = UserRole.Role.USER;
 
 	private String email;
 
@@ -61,6 +60,7 @@ public class User {
 	}
 
 	public static UserResponseDto of(User user) {
+		if (user == null) return null;
 		return UserResponseDto.builder()
 				.userId(user.getUserId())
 				.build();

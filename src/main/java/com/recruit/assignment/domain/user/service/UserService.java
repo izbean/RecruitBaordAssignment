@@ -74,7 +74,7 @@ public class UserService implements UserDetailsService {
         if (user == null) throw new UsernameNotFoundException(username);
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getAuthority().name()));
+        authorities.add(new SimpleGrantedAuthority(user.getAuthority()));
 
         return new org.springframework.security.core.userdetails.User(user.getUserId(), user.getPassword(), authorities);
     }

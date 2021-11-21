@@ -24,13 +24,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
 
+    private final LoginFailureHandler loginFailureHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    @Bean
-    public LoginFailureHandler loginFailureHandler() { return new LoginFailureHandler(); }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -38,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // Role Setting.
 //                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/*").permitAll()
+                .antMatchers("/user/**").permitAll()
                 .antMatchers("/api/v1/user/**").permitAll()
                 .antMatchers("/api/v1/board/**").hasRole(UserRole.USER.name())
                 .antMatchers("/admin/**").hasRole(UserRole.ADMIN.name())
@@ -47,8 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("userId")
                 .passwordParameter("password")
                 .loginPage("/user/login")
-                .failureHandler(loginFailureHandler())
-                .failureForwardUrl("/login")
+                .failureHandler(loginFailureHandler)
                 .defaultSuccessUrl("/")
                 // Logout.
                 .and()

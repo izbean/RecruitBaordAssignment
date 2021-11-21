@@ -11,12 +11,9 @@
     <script src="/js/bootstrap.min.js"></script>
    	<script type="text/javascript">
 
-		function boardWrite() {
-			
-			console.log("dd");
-			
+		function postWrite() {
 			var title = $('#info').find('[name=title]').val();
-			var content = $('#info').find('[name=title]').val();
+			var content = $('#info').find('[name=contents]').val();
 			
 	    	if (!title) {
 	    		alert("제목을 입력해주세요.");
@@ -29,7 +26,7 @@
 	    	}
 			
 	        $.ajax({
-	            url: '/api/v1/board/',
+	            url: '/api/v1/post/',
 	            method: 'POST',
 	            data : $('#info').serialize(),
 	            async : true,
@@ -48,7 +45,7 @@
 <body>
      <header th:fragment="header">
         <nav class="navbar navbar-inverse">
-            <a class="navbar-brand" href="/board/list">Simple Board</a>
+            <a class="navbar-brand" href="/post/list">Simple Board</a>
         </nav>
     </header>
     
@@ -60,21 +57,27 @@
         	<form id="info" onsubmit="return false;">
         		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 	            <div class="row">
-	                <div class="form-group col-lg-12">
+					<div class="form-group col-lg-4">
+						<label>카테고리</label>
+						<div class="input-group">
+							<input type="text" name="category" class="form-control form-control-lg" placeholder="" maxlength="20" required>
+						</div>
+					</div>
+	                <div class="form-group col-lg-8">
 	                  <label>제목</label>
 	                  <div class="input-group">
-	                    <input type="text" name="title" class="form-control form-control-lg " placeholder="" maxlength="20" required>
+	                    <input type="text" name="title" class="form-control form-control-lg" placeholder="" maxlength="20" required>
 	                  </div>
 	                </div>
 	                <div class="form-group col-lg-12" id="editor">
 	                  <label>내용</label>
 	                  <div class="input-group">
-	                    <textarea name="content" class="form-control form-control-lg " placeholder="" rows="20"  required></textarea>
+	                    <textarea name="contents" class="form-control form-control-lg" placeholder="" rows="20"  required></textarea>
 	                  </div>
 	                </div>
 	            </div>
 		        <div class="pull-left">
-		            <a onclick="boardWrite();" class="btn btn-primary btn-block">작성</a>
+		            <a onclick="postWrite();" class="btn btn-primary btn-block">작성</a>
 		        </div>
 	        </form>
         </div>
