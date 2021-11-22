@@ -10,41 +10,42 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller("/")
+@Controller
+@RequestMapping("/")
 @RequiredArgsConstructor
 public class IndexController {
 
     private final PostService postService;
 
-    @GetMapping("/")
+    @GetMapping
     public String index(@PageableDefault Pageable pageable, Model model) {
         model.addAttribute("boardList", postService.getByBoardList(pageable));
         model.addAttribute("postCount", postService.getPostCount());
-        return "/index";
+        return "index";
     }
 
-    @GetMapping("/post/create")
+    @GetMapping("post/create")
     public String form() {
-        return "/post/form";
+        return "post/form";
     }
 
-    @GetMapping("/post/{postId}")
+    @GetMapping("post/{postId}")
     public String getBoardContentDetail(
             @PathVariable long postId,
             Model model
     ) {
         model.addAttribute("ContentDetail", postService.getPostDetail(postId));
-        return "/post/detail";
+        return "post/detail";
     }
 
-    @RequestMapping("/user/login")
+    @RequestMapping("user/login")
     public String login() {
-        return "/user/login";
+        return "user/login";
     }
 
-    @GetMapping("/user/register")
+    @GetMapping("user/register")
     public String register() {
-        return "/user/register";
+        return "user/register";
     }
 
 }

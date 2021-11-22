@@ -26,10 +26,10 @@ public class User {
 	private List<Post> modifiedUserPosts;
 
 	@OneToMany(mappedBy = "createdUser")
-	private List<PostComment> createdUserBoardComments;
+	private List<PostComment> createdUserPostComments;
 
 	@OneToMany(mappedBy = "modifiedUser")
-	private List<PostComment> modifiedUserBoardComments;
+	private List<PostComment> modifiedUserPostComments;
 
 	@NotEmpty
 	private String password;

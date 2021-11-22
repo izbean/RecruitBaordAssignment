@@ -1,16 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" 
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
-        layout:decorator="/layout/default">
+        layout:decorator="/layout/default_layout">
  
-<head>
-   	<title>Form</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link rel='stylesheet' th:href='@{/css/bootstrap.min.css}'>
-    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-    <script src="/js/bootstrap.min.js"></script>
-   	<script type="text/javascript">
-
+	<script>
 		function contentModify() {
 			
 			if (!confirm("위의 내용으로 수정 하시겠습니까 ?")) return;
@@ -33,12 +26,13 @@
 		function contentDelete() {
 			
 			if (!confirm("정말 삭제 하시겠습니까?")) return;
-			
+
+			let postId = document.getElementById("postId");
+
 	        $.ajax({
-	            url: '/post/delete',
+	            url: '/api/v1/post/' + postId,
 	            method: 'DELETE',
 	            async : false,
-	            data : $('#info').serialize(),
 	            success : function (res) {
 	          	  alert("게시글 삭제 완료");
 	          	  location.href='/post/list';
@@ -70,25 +64,17 @@
 				$('#updateCancle').hide();
 			}
 		}
-		
+
     </script>
-</head>
- 
 <body>
-     <header th:fragment="header">
-        <nav class="navbar navbar-inverse">
-            <a class="navbar-brand" href="/post/list">Simple Board</a>
-        </nav>
-    </header>
-    
     <div class="container" layout:fragment="content">
         <div class="page-header">
             <h1>게시글 상세</h1>
         </div>
         <div class="container-fluid">
-        	<form id="info" onsubmit="return false;">
+        	<form id="detail" onsubmit="return false;">
         		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        		<input type="hidden" id="idx" name="idx" th:value="${ContentDetail.id}"/>
+        		<input type="hidden" id="postId" name="postId" th:value="${ContentDetail.id}"/>
 	            <div class="row">
 	                <div class="form-group col-lg-12">
 	                  <label>제목</label>
@@ -107,10 +93,20 @@
 		            <a id="update" th:if="${ContentDetail.id}" onclick="showModifyForm(this.id);" class="btn btn-info btn-block">수정</a>
 		            <a id="updateConfirm" onclick="contentModify(this.id);" class="btn btn-success btn-block" style="display: none;">완료</a>
 		            <a id="updateCancle" onclick="showModifyForm(this.id);" class="btn btn-warning btn-block" style="display: none;">취소</a>
-		            <a id="delete" th:if="${ContentDetail.id}"onclick="contentDelete();" class="btn btn-danger btn-block">삭제</a>
+		            <a id="delete" th:if="${ContentDetail.id}"onclick="detail.delete();" class="btn btn-danger btn-block">삭제</a>
 		        </div>
 	        </form>
         </div>
     </div>
 </body>
+<script th:fragment="customScript">
+	let detail = {
+		modify: function() {
+
+		},
+		delete: function() {
+
+		}
+	};
+</script>
 </html>

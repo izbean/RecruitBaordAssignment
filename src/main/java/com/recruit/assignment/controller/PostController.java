@@ -11,7 +11,7 @@ import com.recruit.assignment.domain.post.service.PostService;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/board")
+@RequestMapping("/api/v1/post")
 @RequiredArgsConstructor
 public class PostController {
 

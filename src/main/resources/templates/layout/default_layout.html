@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Board</title>
+    <th:block th:replace="/layout/fragment/config :: configFragment"/>
+</head>
+<body>
+    <th:block th:replace="/layout/fragment/header :: headerFragment"/>
+    <th:block layout:fragment="content"></th:block>
+    <th:block th:replace="/layout/fragment/footer :: footerFragment"/>
+</body>
+<th:block layout:fragement="customScript"/>
+</html>
