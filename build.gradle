@@ -30,11 +30,12 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.6'
 
 }
+
 jar {
     manifest {
-        attributes 'Title': 'RecruitAssignment',
+        attributes 'Title': 'spring-boot-board',
                    'Version': 1.0,
-                   'Main-Class': 'com.recruit.assignment.RecruitAssignmentApplication'
+                   'Main-Class': 'com.board.SpringBoardApplication'
     }
     from {
         configurations.compile.collect {
